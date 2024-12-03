@@ -14,39 +14,35 @@ def quantum_portfolio_optimization(returns, covariance, lambda_risk):
     Returns:
         dict: Optimal portfolio decision and objective value.
     """
-    # Create a fresh Quadratic Program
     qp = QuadraticProgram()
 
-    # Add binary variables for each asset
     num_assets = len(returns)
     for i in range(num_assets):
         qp.binary_var(f"x{i}")
 
-    # Define the objective function: Linear + Quadratic terms
-    linear_coeffs = {f"x{i}": -returns[i] for i in range(num_assets)}  # Negative for maximization
+    
+    linear_coeffs = {f"x{i}": -returns[i] for i in range(num_assets)}  
     quadratic_coeffs = {
         (f"x{i}", f"x{j}"): lambda_risk * covariance[i][j]
         for i in range(num_assets) for j in range(num_assets)
     }
     qp.minimize(linear=linear_coeffs, quadratic=quadratic_coeffs)
 
-    # Convert to Ising Hamiltonian
+
     operator, offset = qp.to_ising()
 
-    # Solve using NumPyMinimumEigensolver
+    
     solver = NumPyMinimumEigensolver()
     result = solver.compute_minimum_eigenvalue(operator)
     
-    # Decode statevector
+    
     statevector = result.eigenstate.data
-    probabilities = np.abs(statevector) ** 2  # Calculate probabilities
-    max_prob_index = np.argmax(probabilities)  # Find the most likely state
-    binary_decision = f"{max_prob_index:0{num_assets}b}"  # Convert to binary string
+    probabilities = np.abs(statevector) ** 2  
+    max_prob_index = np.argmax(probabilities)  
+    binary_decision = f"{max_prob_index:0{num_assets}b}"  
 
-    # Decode portfolio decision
     selected_assets = [i for i, bit in enumerate(binary_decision) if bit == "1"]
 
-    # Calculate portfolio metrics
     portfolio_return = sum(returns[i] for i in selected_assets)
     portfolio_risk = sum(
         covariance[i][j] for i in selected_assets for j in selected_assets
