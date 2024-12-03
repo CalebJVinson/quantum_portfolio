@@ -35,11 +35,11 @@ class QuantumPortfolioOptimizer:
         self.qp = QuadraticProgram()
         num_assets = len(self.stocks)
 
-        # Add binary variables
+        
         for i in range(num_assets):
             self.qp.binary_var(f"x{i}")
 
-        # Objective function
+        
         linear_coeffs = {f"x{i}": -self.returns[i] for i in range(num_assets)}
         quadratic_coeffs = {
             (f"x{i}", f"x{j}"): self.lambda_risk * self.cov_matrix[i][j]
@@ -47,7 +47,7 @@ class QuantumPortfolioOptimizer:
         }
         self.qp.minimize(linear=linear_coeffs, quadratic=quadratic_coeffs)
 
-        # Budget constraint
+        
         self.qp.linear_constraint(
             linear={f"x{i}": 1 for i in range(num_assets)},
             sense="==",
@@ -69,19 +69,19 @@ class QuantumPortfolioOptimizer:
         if solver == "NumPy":
             solver_instance = NumPyMinimumEigensolver()
         elif solver == "QAOA":
-            backend = Aer.get_backend("aer_simulator")  # Use Aer's simulator backend
-            sampler = BackendSamplerV2(backend)  # Use BackendSampler for the backend
-            optimizer = COBYLA(maxiter=100)  # Classical optimizer for QAOA
-            solver_instance = QAOA(sampler=sampler, optimizer=optimizer, reps=2)  # Correct usage
+            backend = Aer.get_backend("aer_simulator")  
+            sampler = BackendSamplerV2(backend)  
+            optimizer = COBYLA(maxiter=100)
+            solver_instance = QAOA(sampler=sampler, optimizer=optimizer, reps=2)
         else:
             raise ValueError("Invalid solver. Choose 'NumPy' or 'QAOA'.")
 
-        # Solve the problem
+        
         result = solver_instance.compute_minimum_eigenvalue(operator)
 
-        # Access probabilities and find the most likely solution
-        probabilities = result.eigenstate  # QuasiDistribution object
-        max_prob_index = max(probabilities, key=probabilities.get)  # Get index with max probability
+        
+        probabilities = result.eigenstate  
+        max_prob_index = max(probabilities, key=probabilities.get)  
         binary_decision = f"{max_prob_index:0{len(self.stocks)}b}"
 
         # Decode results
