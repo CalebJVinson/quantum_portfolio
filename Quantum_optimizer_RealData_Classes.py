@@ -58,14 +58,11 @@ class QuantumPortfolioOptimizer:
 
     def solve(self, solver="NumPy"):
         """Solve the quadratic program."""
-        # Convert constraints to QUBO
         qubo_converter = QuadraticProgramToQubo()
         qp_qubo = qubo_converter.convert(self.qp)
 
-        # Convert to Ising
         operator, offset = qp_qubo.to_ising()
 
-        # Choose solver
         if solver == "NumPy":
             solver_instance = NumPyMinimumEigensolver()
         elif solver == "QAOA":
@@ -84,7 +81,7 @@ class QuantumPortfolioOptimizer:
         max_prob_index = max(probabilities, key=probabilities.get)  
         binary_decision = f"{max_prob_index:0{len(self.stocks)}b}"
 
-        # Decode results
+        
         selected_assets = [i for i, bit in enumerate(binary_decision) if bit == "1"]
         allocation = [
             self.initial_capital / len(selected_assets) if i in selected_assets else 0
@@ -132,9 +129,7 @@ print("Capital Allocation:", result["allocation"])
 print("Portfolio Return:", result["portfolio_return"]*100)
 print("Portfolio Risk:", result["portfolio_risk"])
 
-# Visualize the portfolio
 optimizer.visualize(result["allocation"])
 
-# Calculate Sharpe Ratio
 sharpe = optimizer.sharpe_ratio(result["portfolio_return"], result["portfolio_risk"])
 print("Sharpe Ratio:", sharpe)
