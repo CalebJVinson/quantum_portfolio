@@ -3,17 +3,7 @@ from qiskit_optimization import QuadraticProgram
 from qiskit_algorithms.minimum_eigensolvers import NumPyMinimumEigensolver
 
 def quantum_portfolio_optimization(returns, covariance, lambda_risk):
-    """
-    Perform portfolio optimization using a classical solver for testing.
-
-    Parameters:
-        returns (list): Expected returns for the assets.
-        covariance (list of lists): Covariance matrix of the assets.
-        lambda_risk (float): Risk aversion parameter.
-
-    Returns:
-        dict: Optimal portfolio decision and objective value.
-    """
+    
     qp = QuadraticProgram()
 
     num_assets = len(returns)
