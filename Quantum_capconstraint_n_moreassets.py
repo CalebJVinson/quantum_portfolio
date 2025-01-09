@@ -104,7 +104,7 @@ print("Portfolio Return:", result["portfolio_return"])
 print("Portfolio Risk:", result["portfolio_risk"])
 print("Sharpe Ratio:", result["sharpe_ratio"])
 
-lambdas = np.linspace(0.1, 2.0, 20)  # Range of lambda_risk values
+lambdas = np.linspace(0.1, 2.0, 20) 
 frontier = []
 for lam in lambdas:
     result = quantum_portfolio_optimization(num_assets=10, lambda_risk=lam)
