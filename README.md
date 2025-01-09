@@ -8,3 +8,10 @@ $$
 |q_1\rangle &\ \xrightarrow{\text{CNOT}}\ \frac{|00\rangle + |11\rangle}{\sqrt{2}}
 \end{aligned}
 $$
+
+$$
+\Qcircuit @C=1em @R=1em {
+    \lstick{|q_0\rangle} & \gate{H} & \ctrl{1} & \qw \\
+    \lstick{|q_1\rangle} & \qw      & \targ    & \qw
+}
+$$
