@@ -27,7 +27,23 @@ In the standard version of these, we have two angles which we are trying to dete
 
 For this set up we use Dirac notation starting with an initial state, usually $|0...0 \rangle$ which we define for the initial state $|s \rangle$. Considering the angles, $\beta, \text{ and } \gamma$, we form the state:
 
-$$|\beta_p, \gamma_p \rangle = U(H_E, \beta_p) U(H_0, \gamma_p) ... U(H_E, \beta_1) U(H_0, \gamma_1) | s \rangle $$
+$$|\beta_n, \gamma_n \rangle = U(H_E, \beta_n) U(H_0, \gamma_n) ... U(H_E, \beta_1) U(H_0, \gamma_1) | s \rangle $$
 
-where p is the number of steps taken in revaluating the maesured solution and performing
+where p is the number of steps taken in applying $U(H_E, \beta) U(H_), \gamma)$ onto the state. We act on each period by starting with some initial parameters, measuring the result, and update the angles to approach a solution.
+
+# Adiabatic Quantum Computing (AQC)
+
+There are two ways of Considering the background, there is an unknown Hamiltonian that is composed of the cost curve and a Hamiltonian that is known. The unknown is $H_C$ and the known is $H_S$. From this, we hope to match the known to the unknown by applying the above. So, we can form a new process as $H(\alpha) = (1 - \alpha) H_s + \alpha H_C$, which results in $H_S$ when $\alpha = 1$ and $H_C$ when $\alpha = 0$. The system evolves as we increment $\alpha$ that we define as $\alpha = \frac{n}{N}$. 
+
+## Conversion of Real-World Problems into Hamiltonian
+
+If we can not encode data into readable information, then we can encode the problems using *Ising Models*. These models encode values in a method than summations inputs that desire to be in opposite spins, by a negative weight. This can be modeled as:
+
+$$ H(\sigma) = - \sum{\langle i,j \rangle}{} J_{i,j} \sigma_i \sigma_j$$
+
+From this, *i* represents a particle and *j* represents a particle and the $J_{i,j}$ value represents the strength between particles.
+
+* Note: The approach called *Quantum Annealing* is an imperfect implementation of the AQC process.
+
+
 # Future Interests: Quantum Coins & Quantum Walks
